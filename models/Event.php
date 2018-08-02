@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "event".
@@ -13,6 +14,8 @@ use Yii;
  * @property string $end_at Конец
  * @property string $created_at Создано
  * @property string $updated_at Обновлено
+ * @property int $author_id
+ * @property User $author
  */
 class Event extends \yii\db\ActiveRecord
 {
@@ -30,7 +33,7 @@ class Event extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['start_at', 'end_at', 'created_at', 'updated_at'], 'safe'],
+            [['start_at', 'end_at', 'created_at', 'updated_at', 'author_id'], 'safe'],
             [['name'], 'string', 'max' => 255],
         ];
     }
@@ -48,5 +51,12 @@ class Event extends \yii\db\ActiveRecord
             'created_at' => 'Создано',
             'updated_at' => 'Обновлено',
         ];
+    }
+
+    /**
+     *  @return ActiveQuery
+     */
+    public function getAuthor() {
+        return $this->hasOne(User::class, ['id', 'author_id']);
     }
 }
