@@ -30,7 +30,7 @@ class EventController extends Controller
     }
 
     public function actionJson($id) {
-        $model = Event::findOne(['id', $id]);
+        $model = $this->findModel($id);
         return $this->asJson($model->getAttributes());
     }
 
