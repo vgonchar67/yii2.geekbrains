@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Event;
+use app\models\Access;
 
 /**
- * EventSearch represents the model behind the search form of `app\models\Event`.
+ * AccessSearch represents the model behind the search form of `app\models\Access`.
  */
-class EventSearch extends Event
+class AccessSearch extends Access
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,7 @@ class EventSearch extends Event
     public function rules()
     {
         return [
-            [['id', 'author_id'], 'integer'],
-            [['name', 'start_at', 'end_at', 'created_at', 'updated_at'], 'safe'],
+            [['id', 'event_id', 'user_id'], 'integer'],
         ];
     }
 
@@ -41,8 +40,7 @@ class EventSearch extends Event
      */
     public function search($params)
     {
-        $query = Event::find();
-        $query->andWhere(['author_id' => Yii::$app->user->id]);
+        $query = Access::find();
 
         // add conditions that should always apply here
 
@@ -61,14 +59,9 @@ class EventSearch extends Event
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'start_at' => $this->start_at,
-            'end_at' => $this->end_at,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'author_id' => $this->author_id,
+            'event_id' => $this->event_id,
+            'user_id' => $this->user_id,
         ]);
-
-        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

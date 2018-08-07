@@ -95,7 +95,25 @@ a.desc:after {
     padding: 15px;
     border: none;
 }
-
+.calendar {
+    width: 100%;
+}
+.calendar td{
+    width: 100px;
+    height: 100px;
+    vertical-align: top;
+    position: relative;
+    padding: 15px;
+}
+.calendar .current {
+    background: #d2ffd9;
+}
+.calendar .date-num {
+    color: grey;
+    position: absolute;
+    top: 2px; left: 2px;
+    font-size: 12px;
+}
 @media(max-width:767px) {
     .nav li > form > button.logout {
         display:block;
