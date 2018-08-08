@@ -22,8 +22,6 @@ class m180802_175611_alter_event extends Migration
     public function safeDown()
     {
         $this->dropColumn(Event::tableName(), 'author_id');
-
-        return false;
     }
 
 }
