@@ -95,7 +95,9 @@ class Event extends \yii\db\ActiveRecord
         );
     }
 
-
+    /**
+     * @return bool
+     */
     public function isPast() {
         $date = new \DateTime($this->end_at);
         $currentDate = new \DateTime();
