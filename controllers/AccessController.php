@@ -6,6 +6,7 @@ use app\objects\ViewModels\AccessCreateView;
 use Yii;
 use app\models\Access;
 use app\models\search\AccessSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -15,6 +16,7 @@ use yii\filters\VerbFilter;
  */
 class AccessController extends Controller
 {
+
     /**
      * {@inheritdoc}
      */
@@ -25,6 +27,16 @@ class AccessController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::class,
+
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];

@@ -42,13 +42,23 @@ class EventSearch extends Event
     public function search($params)
     {
         $query = Event::find();
-        $query->andWhere(['author_id' => Yii::$app->user->id]);
 
-        // add conditions that should always apply here
+        $query->leftJoin(['access' => 'access'], 'event.id = access.event_id');
+        $query->andWhere([
+            'or',
+            ['event.author_id' => \Yii::$app->user->getId()],
+            ['access.user_id' => \Yii::$app->user->getId()],
+        ]);
+        $query->groupBy('id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 4,
+            ],
+
         ]);
+
 
         $this->load($params);
 
@@ -67,6 +77,8 @@ class EventSearch extends Event
             'updated_at' => $this->updated_at,
             'author_id' => $this->author_id,
         ]);
+
+
 
         $query->andFilterWhere(['like', 'name', $this->name]);
 

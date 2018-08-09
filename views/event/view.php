@@ -5,6 +5,7 @@ use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Event */
+/* @var $viewModel \app\objects\ViewModels\EventView */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Events', 'url' => ['index']];
@@ -14,8 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <?php if ($viewModel->canWrite($model)): ?>
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php if(!$model->isPast()):?>
+            <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php endif;?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -24,16 +28,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
+    <?php endif;?>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
             'name',
-            'start_at',
-            'end_at',
-            'created_at',
-            'updated_at',
+            'start_at:date',
+            'end_at:date',
+            'created_at:datetime',
+            'updated_at:datetime',
             'author_id',
         ],
     ]) ?>

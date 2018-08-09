@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Event */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $viewModel \app\objects\ViewModels\EventCreateView */
 ?>
 
 <div class="event-form">
@@ -18,7 +19,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'end_at')->textInput(['type' => 'date']) ?>
 
-    <?= $form->field($model, 'author_id')->textInput() ?>
+    <?= $form->field($model, 'users')
+        ->checkboxList($viewModel->getUserOptions(), ['separator' => '<br/>',])
+        ->label('Пользователи')
+        ->hint('Пользователи, которые будут иметь доступ к заметке');
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

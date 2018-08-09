@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveQuery;
+use yii\filters\AccessControl;
 
 /**
  * This is the model class for table "access".
@@ -16,6 +17,8 @@ use yii\db\ActiveQuery;
  */
 class Access extends \yii\db\ActiveRecord
 {
+
+
     /**
      * {@inheritdoc}
      */
@@ -59,5 +62,15 @@ class Access extends \yii\db\ActiveRecord
      */
     public function getEvent() {
         return $this->hasOne(Event::class, ['id' => 'event_id']);
+    }
+
+    public static function saveAccess(Event $event, int $userId): void
+    {
+        $access = new self();
+        $access->setAttributes([
+            'event_id' => $event->id,
+            'user_id' => $userId,
+        ]);
+        $access->save();
     }
 }

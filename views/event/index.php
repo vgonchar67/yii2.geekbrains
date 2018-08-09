@@ -6,6 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\EventSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $viewModel \app\objects\ViewModels\EventView */
 
 $this->title = 'Events';
 $this->params['breadcrumbs'][] = $this->title;
@@ -33,7 +34,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at:datetime',
             'author_id',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'visibleButtons' => [
+                    'update' => function($model) use ($viewModel) {
+                       return $viewModel->canWrite($model) && !$model->isPast();
+                    },
+                    'delete' => function($model) use ($viewModel) {
+                        return $viewModel->canWrite($model);
+                    },
+                ]
+            ],
         ],
     ]); ?>
 </div>

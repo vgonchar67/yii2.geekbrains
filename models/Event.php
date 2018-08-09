@@ -3,7 +3,9 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "event".
@@ -27,6 +29,29 @@ class Event extends \yii\db\ActiveRecord
         return 'event';
     }
 
+    public function behaviors()
+	{
+		return [
+			'timestamp' => [
+				'class' => TimestampBehavior::class,
+				'createdAtAttribute' => 'created_at',
+				'updatedAtAttribute' => 'updated_at',
+                'value' => new Expression('NOW()'),
+			],
+		];
+	}
+
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert) {
+        if (!$this->author_id) {
+            $this->author_id = \Yii::$app->getUser()->getId();
+        }
+        return parent::beforeSave($insert);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -34,6 +59,7 @@ class Event extends \yii\db\ActiveRecord
     {
         return [
             [['start_at', 'end_at', 'created_at', 'updated_at', 'author_id'], 'safe'],
+            [['name'], 'required'],
             [['name'], 'string', 'max' => 255],
         ];
     }
@@ -58,5 +84,21 @@ class Event extends \yii\db\ActiveRecord
      */
     public function getAuthor() {
         return $this->hasOne(User::class, ['id', 'author_id']);
+    }
+    public function getUsers(){
+        return $this->hasMany(
+            User::className(),
+            ['id' => 'user_id']
+        )->viaTable(
+            'access',
+            ['event_id' => 'id']
+        );
+    }
+
+
+    public function isPast() {
+        $date = new \DateTime($this->end_at);
+        $currentDate = new \DateTime();
+        return $currentDate > $date;
     }
 }
