@@ -1,7 +1,11 @@
 <?php
 
+use yii\caching\DummyCache;
+use yii\redis\Cache;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$redis = require __DIR__ . '/redis.php';
 
 $config = [
     'id' => 'basic',
@@ -12,14 +16,15 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'homeUrl'=>array('event/'),
+    'defaultRoute' => 'event/index',
+    //'homeUrl'=>array('event/'),
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'kg5JfN-86m42WgI6hUWJobBQh0dxgdu8',
         ],
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => Cache::class,
         ],
         'user' => [
             'identityClass' => 'app\models\User',
@@ -44,6 +49,7 @@ $config = [
                 ],
             ],
         ],
+        'redis' => $redis,
         'db' => $db,
 
         'urlManager' => [

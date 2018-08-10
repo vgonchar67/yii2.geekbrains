@@ -10,6 +10,7 @@ use app\models\Event;
 use app\models\search\EventSearch;
 use yii\db\Expression;
 use yii\filters\AccessControl;
+use yii\filters\HttpCache;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -42,6 +43,27 @@ class EventController extends Controller
                         'roles' => ['@'],
                     ],
                 ],
+            ],
+           /* 'httpCacheIndex' => [
+                'class' => HttpCache::class,
+                'only' => ['index'],
+                'lastModified' => function ($action, $params) {
+                    $q = new \yii\db\Query();
+                    $date = new \DateTime($q->from('event')->max('updated_at'));
+                    return $date->getTimestamp();
+                },
+            ],*/
+            'httpCacheView' => [
+                'class' => HttpCache::class,
+                'only' => ['view'],
+                'lastModified' => function (yii\base\InlineAction $action, $params) {
+
+                    $event = Event::findOne(Yii::$app->request->get('id'));
+
+                    $date = new \DateTime($event->updated_at);
+
+                    return $date->getTimestamp();
+                },
             ],
         ];
     }

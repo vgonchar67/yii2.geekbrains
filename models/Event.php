@@ -83,8 +83,12 @@ class Event extends \yii\db\ActiveRecord
      *  @return ActiveQuery
      */
     public function getAuthor() {
-        return $this->hasOne(User::class, ['id', 'author_id']);
+        return $this->hasOne(User::class, ['id' => 'author_id']);
     }
+
+    /**
+     *  @return ActiveQuery
+     */
     public function getUsers(){
         return $this->hasMany(
             User::className(),
@@ -93,6 +97,11 @@ class Event extends \yii\db\ActiveRecord
             'access',
             ['event_id' => 'id']
         );
+    }
+
+    public function getAccess(): ActiveQuery
+    {
+        return $this->hasOne(Access::class, ['event_id' => 'id']);
     }
 
     /**

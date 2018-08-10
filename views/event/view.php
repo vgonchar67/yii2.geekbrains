@@ -30,17 +30,20 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <?php endif;?>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'name',
-            'start_at:date',
-            'end_at:date',
-            'created_at:datetime',
-            'updated_at:datetime',
-            'author_id',
-        ],
-    ]) ?>
+    <?php if ($this->beginCache('event-view-' . $model->id, ['duration' => 60])):?>
 
+        <?= DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+                'id',
+                'name',
+                'start_at:date',
+                'end_at:date',
+                'created_at:datetime',
+                'updated_at:datetime',
+                'author_id',
+            ],
+        ]) ?>
+        <?=$this->endCache();?>
+    <?php endif;?>
 </div>

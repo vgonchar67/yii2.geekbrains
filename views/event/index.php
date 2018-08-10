@@ -20,31 +20,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Event', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
+    <?=\yii\widgets\ListView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'name',
-            'start_at:date',
-            'end_at:date',
-            'created_at:datetime',
-            'updated_at:datetime',
-            'author_id',
-
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'visibleButtons' => [
-                    'update' => function($model) use ($viewModel) {
-                       return $viewModel->canWrite($model) && !$model->isPast();
-                    },
-                    'delete' => function($model) use ($viewModel) {
-                        return $viewModel->canWrite($model);
-                    },
-                ]
-            ],
+        'viewParams' => [
+             'viewModel' => $viewModel,
         ],
-    ]); ?>
+        'layout' => "{summary}<div class='flex row'>{items}</div>{pager}",
+        'itemView' => '_item',
+    ]);?>
 </div>

@@ -4,6 +4,7 @@ namespace app\models\search;
 
 use Yii;
 use yii\base\Model;
+use yii\caching\DbDependency;
 use yii\data\ActiveDataProvider;
 use app\models\Event;
 
@@ -42,14 +43,33 @@ class EventSearch extends Event
     public function search($params)
     {
         $query = Event::find();
-
-        $query->leftJoin(['access' => 'access'], 'event.id = access.event_id');
+        $query->joinWith('author');
+        $query->joinWith('access');
         $query->andWhere([
             'or',
-            ['event.author_id' => \Yii::$app->user->getId()],
+            ['user.id' => \Yii::$app->user->getId()],
             ['access.user_id' => \Yii::$app->user->getId()],
         ]);
         $query->groupBy('id');
+
+
+        $command = Event::find()
+            ->select('COUNT(*)')
+            ->joinWith('access')
+            ->andWhere(
+                [
+                    'or',
+                    ['author_id' => \Yii::$app->user->getId()],
+                    ['access.user_id' => \Yii::$app->user->getId()],
+                ]
+            )
+            ->createCommand();
+
+        $dependency = new DbDependency([
+            'sql' => $command->getRawSql(),
+        ]);
+
+        $query->cache(3600, $dependency);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

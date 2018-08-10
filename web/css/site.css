@@ -131,3 +131,16 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.flex {
+    display:flex;
+    flex-wrap: wrap;
+
+}
+.flex > div {
+    width: 50%;
+    padding: 15px;
+}
+.flex .panel {
+    height: 100%;
+}
