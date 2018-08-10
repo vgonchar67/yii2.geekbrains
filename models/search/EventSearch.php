@@ -69,6 +69,7 @@ class EventSearch extends Event
             'sql' => $command->getRawSql(),
         ]);
 
+
         $query->cache(3600, $dependency);
 
         $dataProvider = new ActiveDataProvider([
