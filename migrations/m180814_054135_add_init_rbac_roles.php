@@ -95,7 +95,6 @@ class m180814_054135_add_init_rbac_roles extends Migration
 
 
         $auth->addChild($viewAccessEvent, $viewEvent);
-        $auth->addChild($updateOwnEvent, $viewAccessEvent);
 
         $auth->addChild($admin, $viewEvent);
         $auth->addChild($user, $viewAccessEvent);

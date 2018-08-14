@@ -14,6 +14,6 @@ class AccessEventRule extends Rule
         if(!isset($params['event'])) {
             return false;
         }
-        return Access::find()->andWhere(['event_id' => $params['event']->id, 'user_id' => $user_id])->count();
+        return $params['event']->author_id == $user_id || Access::find()->andWhere(['event_id' => $params['event']->id, 'user_id' => $user_id])->count();
     }
 }
