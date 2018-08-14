@@ -44,6 +44,15 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         return true;
     }
 
+
+    public function afterSave($insert, $changedAttributes){
+        parent::afterSave($insert, $changedAttributes);
+
+        $userRole = \Yii::$app->authManager->getRole('user');
+        \Yii::$app->authManager->assign($userRole, $this->id);
+    }
+
+
     /**
      * {@inheritdoc}
      */
