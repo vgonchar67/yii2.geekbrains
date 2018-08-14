@@ -43,7 +43,7 @@ class EventController extends Controller
                     ],
                 ],
             ],
-            /*'httpCacheView' => [
+            'httpCacheView' => [
                 'class' => HttpCache::class,
                 'only' => ['view'],
                 'lastModified' => function (yii\base\InlineAction $action, $params) {
@@ -54,7 +54,7 @@ class EventController extends Controller
 
                     return $date->getTimestamp();
                 },
-            ],*/
+            ],
         ];
     }
 
