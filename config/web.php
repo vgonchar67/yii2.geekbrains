@@ -65,7 +65,16 @@ $config = [
             'thousandSeparator' => ' ',
             'currencyCode' => 'EUR',
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            'cache' => 'cache',
+        ],
 
+    ],
+    'modules' => [
+        'admin' => [
+            'class' => '\app\modules\admin\AdminModule',
+        ],
     ],
     'params' => $params,
 ];

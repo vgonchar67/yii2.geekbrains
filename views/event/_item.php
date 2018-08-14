@@ -17,12 +17,11 @@ $name = \yii\helpers\Html::encode($model->name);
         <p>Конец: <?=\Yii::$app->formatter->asDate($model->end_at);?></p>
         <p>Создано: <?=\Yii::$app->formatter->asDateTime($model->created_at);?></p>
         <p>Обновлено: <?=\Yii::$app->formatter->asDateTime($model->updated_at);?></p>
-        <?php if ($viewModel->canWrite($model)): ?>
+        <?php if ($model->updatable): ?>
             <p class="text-right">
-                <?php if(!$model->isPast()):?>
-                    <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-                <?php endif;?>
-                <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+                <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+
+                <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
                     'data' => [
                         'confirm' => 'Удалить событие?',

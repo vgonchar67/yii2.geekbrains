@@ -1,6 +1,6 @@
 <?php
 
-namespace app\controllers;
+namespace app\modules\admin\controllers;
 
 use app\models\Access;
 use app\models\forms\EventForm;
@@ -15,12 +15,14 @@ use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\objects\ViewModels\EventView;
 
 /**
  * EventController implements the CRUD actions for Event model.
  */
 class EventController extends Controller
 {
+
     /**
      * {@inheritdoc}
      */
@@ -33,66 +35,16 @@ class EventController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-            'access' => [
-                'class' => AccessControl::class,
 
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            /*'httpCacheView' => [
-                'class' => HttpCache::class,
-                'only' => ['view'],
-                'lastModified' => function (yii\base\InlineAction $action, $params) {
 
-                    $event = Event::findOne(Yii::$app->request->get('id'));
-
-                    $date = new \DateTime($event->updated_at);
-
-                    return $date->getTimestamp();
-                },
-            ],*/
         ];
     }
 
-    public function actionJson($id) {
-        $model = $this->findModel($id);
-        return $this->asJson($model->getAttributes());
+    public function getViewPath()
+    {
+        return Yii::getAlias('@app/views/event');
     }
 
-    public function actionCalendar() {
-
-        $events = Event::find()
-            ->andWhere('MONTH(start_at) = MONTH(NOW()) AND YEAR(start_at) = YEAR(NOW())')
-            ->all();
-
-        $currentDate = new \DateTime();
-        $currentDay = $currentDate->format('j');
-        $date = new \DateTime('first day of');
-
-        $calendar = array();
-        do {
-            $calendar[$date->format('W')][$date->format('N')] = [
-                'num' => $date->format('j'),
-                'events' => [],
-                'current' => $currentDay === $date->format('j'),
-            ];
-            $date->modify('+1 day');
-        } while ($date->format('j') !== '1');
-
-        foreach($events as $event) {
-            $date = new \DateTime($event->start_at);
-            $calendar[$date->format('W')][$date->format('N')]['events'][] = $event;
-        }
-
-
-        return $this->render('calendar', [
-            'calendar' => $calendar
-        ]);
-    }
 
 
     /**
@@ -101,9 +53,9 @@ class EventController extends Controller
      */
     public function actionIndex()
     {
-
         $searchModel = new EventSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -120,7 +72,6 @@ class EventController extends Controller
     public function actionView($id)
     {
         $event = $this->findModel($id);
-
         if (!\Yii::$app->user->can('viewEvent', ['event' => $event])) {
             throw new ForbiddenHttpException('У Вас нет доступа к данному событию');
         }
@@ -161,7 +112,7 @@ class EventController extends Controller
 
 
 
-        if(!$model->updatable){
+        if (!$model->updatable) {
             throw new ForbiddenHttpException('');
         }
 

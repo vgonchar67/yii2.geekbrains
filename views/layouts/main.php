@@ -40,8 +40,7 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'События', 'url' => ['/event']],
             ['label' => 'Календарь', 'url' => ['/event/calendar']],
-            ['label' => 'Пользователи', 'url' => ['/user']],
-            ['label' => 'Access', 'url' => ['/access']],
+            ['label' => 'Админка', 'url' => ['/admin']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
@@ -64,6 +63,7 @@ AppAsset::register($this);
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
+        <h1><?= Html::encode($this->title) ?></h1>
         <?= $content ?>
     </div>
 </div>

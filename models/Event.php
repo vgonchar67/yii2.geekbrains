@@ -21,6 +21,12 @@ use yii\db\Expression;
  */
 class Event extends \yii\db\ActiveRecord
 {
+    public $updatable = false;
+
+    public function afterFind()
+    {
+        $this->updatable = \Yii::$app->user->can('updateEvent', ['event' => $this]);
+    }
     /**
      * {@inheritdoc}
      */

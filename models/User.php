@@ -41,7 +41,6 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             $this->access_token = Yii::$app->security->generateRandomString();
         }
 
-        return true;
     }
 
     /**

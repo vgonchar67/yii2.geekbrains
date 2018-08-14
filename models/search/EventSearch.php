@@ -5,6 +5,7 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\caching\DbDependency;
+use yii\caching\DbQueryDependency;
 use yii\data\ActiveDataProvider;
 use app\models\Event;
 
@@ -54,7 +55,7 @@ class EventSearch extends Event
 
 
         $command = Event::find()
-            ->select('COUNT(*)')
+            ->select('MAX(updated_at)')
             ->joinWith('access')
             ->andWhere(
                 [
@@ -64,6 +65,8 @@ class EventSearch extends Event
                 ]
             )
             ->createCommand();
+
+
 
         $dependency = new DbDependency([
             'sql' => $command->getRawSql(),
