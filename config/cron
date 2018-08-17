@@ -1,0 +1,1 @@
+0 0 * * * /home/user/code/yii2.local/yii log-rotate/access -> /home/user/code/yii2.local/runtime/cron.log
